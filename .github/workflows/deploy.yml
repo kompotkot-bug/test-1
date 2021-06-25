@@ -1,0 +1,21 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+        uses: actions/checkout@v2
+
+      - name: Send event to CI repo
+        run: |
+          curl --request POST \
+            --url https://api.github.com/repos/kompotkot-bug/test-0/dispatches \
+            --header "Accept: application/vnd.github.v3+json" \
+            --data '{"event_type": "deploy"}' \
+            --user "${{ secrets.DEPLOY_USERNAME}}:${{secrets.DEPLOY_PAT}}"
+
